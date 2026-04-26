@@ -1700,7 +1700,7 @@
         <img id="splash-logo" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Logo">
     </div>
     <div class="splash-app-name" id="splash-app-name">Tournament Master BD</div>
-    <div class="splash-version">3.1.0</div>
+    <div class="splash-version">v3.1.0</div>
     
     <div class="splash-bottom-area">
         <div class="splash-welcome">Welcome back!</div>
@@ -2690,15 +2690,14 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, set, onValue, push, update, get, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getDatabase, ref, set, onValue, push, update, get, serverTimestamp, remove, query, orderByChild, equalTo, onDisconnect, runTransaction, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
     import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 
 // একটি ছোট হেল্পার ফাংশন
 const firebaseConfig = JSON.parse(atob(
-  "eyJhcGlLZXkiOiJBSXphU3lDUGNJYkRlc1U2R3BjWlc3VU13LS1EOW9uWVFUX0FscVkiLCJhdXRoRG9tYWluIjoiYXBwLWRhdGFiYXNlLWY0ZWRjLmZpcmViYXNlYXBwLmNvbSIsImRhdGFiYXNlVVJMIjoiaHR0cHM6Ly9hcHAtZGF0YWJhc2UtZjRlZGMtZGVmYXVsdC1ydGRiLmZpcmViYXNlaW8uY29tIiwicHJvamVjdElkIjoiYXBwLWRhdGFiYXNlLWY0ZWRjIiwic3RvcmFnZUJ1Y2tldCI6ImFwcC1kYXRhYmFzZS1mNGVkYy5maXJlYmFzZXN0b3JhZ2UuYXBwIiwibWVzc2FnaW5nU2VuZGVySWQiOiIxMTcyOTgyMDc2MjIiLCJhcHBJZCI6IjE6MTE3Mjk4MjA3NjIyOndlYjo2ZTYxNjk1NzZlYzljYmFmYmMyYTA3IiwibWVhc3VyZW1lbnRJZCI6IkctMFAyTlZRV0RFWiJ9"
+  "eyJhcGlLZXkiOiJBSXphU3lBUFlLMGRLZW1UTVUySGhzLUhKMkVmNjhkZk4wQWhMaTQiLCJhdXRoRG9tYWluIjoidG91cm5hbWVudC1tYXN0ZXItZGNhYjQuZmlyZWJhc2VhcHAuY29tIiwiZGF0YWJhc2VVUkwiOiJodHRwczovL3RvdXJuYW1lbnQtbWFzdGVyLWRjYWI0LWRlZmF1bHQtcnRkYi5maXJlYmFzZWlvLmNvbSIsInByb2plY3RJZCI6InRvdXJuYW1lbnQtbWFzdGVyLWRjYWI0Iiwic3RvcmFnZUJ1Y2tldCI6InRvdXJuYW1lbnQtbWFzdGVyLWRjYWI0LmZpcmViYXNlc3RvcmFnZS5hcHAiLCJtZXNzYWdpbmdTZW5kZXJJZCI6Ijg3MjA2MTE3MTg1IiwiYXBwSWQiOiIxOjg3MjA2MTE3MTg1OndlYjozYTk3NDgwZmZlYmIzMGYxNDdlYmMwIiwibWVhc3VyZW1lbnRJZCI6IkctU0xYRDBENUw5RyJ9"
 ));
-
 
 
 
@@ -2712,7 +2711,7 @@ const auth = getAuth(app);
     window.ref = ref;
     window.push = push;
     window.auth = auth;
-
+    window.remove = remove;
 let blockShown = false;
 
     let currentUser = null;
@@ -2763,7 +2762,7 @@ let blockShown = false;
     window.onload = () => { initData(); };
 
     function initData() {
-        onValue(ref(db, 'categories'), s => {
+        get(ref(db, 'categories')).then(s => {
             const d = s.val();
             if(d) {
                 activeCategories = d;
@@ -2783,7 +2782,7 @@ let blockShown = false;
             }
         });
 
-        onValue(ref(db, 'matches'), s => {
+        onValue(query(ref(db, 'matches'), limitToLast(20)), s => {
             rawMatches = [];
             const d = s.val();
             if(d) Object.entries(d).forEach(([k,v]) => {
@@ -2815,7 +2814,7 @@ let blockShown = false;
 // version
 const APP_VERSION_CODE =3;
 
-onValue(ref(db, 'app_settings'), s => {
+get(ref(db, 'app_settings')).then(s => {
     const d = s.val();
 
     if (d) {
@@ -3910,7 +3909,7 @@ async function verifyAutoPay(method) {
     const trxField = document.getElementById(`trx-${method}`);
 
     const amount = amountField.value.trim();
-    const trxId = trxField.value.trim();
+    const trxId = trxField.value.trim().toUpperCase(); // ভ্যালিডেশন এবং ডাটাবেসের জন্য uppercase করা হলো
     
     // ১. টাকার পরিমাণ ভ্যালিডেশন
     if (!amount || amount <= 0) {
@@ -3923,7 +3922,7 @@ async function verifyAutoPay(method) {
         });
     }
 
-    // ২. ট্রানজেকশন আইডি ভ্যালিডেশন
+    // ২. ট্রানজেকশন আইডি খালি কিনা তা ভ্যালিডেশন
     if (!trxId) {
         return Swal.fire({ 
             icon: 'warning', 
@@ -3934,13 +3933,66 @@ async function verifyAutoPay(method) {
         });
     }
 
+    // ৩. রিয়েল ট্রানজেকশন ফরম্যাট ভ্যালিডেশন (Regex)
+    let isValidFormat = true;
+    let formatErrorMsg = "";
+    
+    const methodLower = method.toLowerCase();
+    
+    if (methodLower === 'bkash') {
+        // bKash: ঠিক ১০ অক্ষরের Letter এবং Number এর সংমিশ্রণ
+        const bkashRegex = /^[A-Z0-9]{10}$/;
+        if (!bkashRegex.test(trxId)) {
+            isValidFormat = false;
+            formatErrorMsg = "আপনার ট্রানজেকশন আইডি  সঠিক  না । দয়া করে সঠিক ট্রানজেকশন দিন ";
+        }
+    } else if (methodLower === 'nagad') {
+        // Nagad: ঠিক ৮ অক্ষরের Letter এবং Number এর সংমিশ্রণ
+        const nagadRegex = /^[A-Z0-9]{8}$/;
+        if (!nagadRegex.test(trxId)) {
+            isValidFormat = false;
+            formatErrorMsg = "আপনার ট্রানজেকশন আইডি  সঠিক  না । দয়া করে সঠিক ট্রানজেকশন দিন ";
+        }
+    } else if (methodLower === 'rocket') {
+        // Rocket: ঠিক ১০ ডিজিটের সংখ্যা
+        const rocketRegex = /^[0-9]{10}$/;
+        if (!rocketRegex.test(trxId)) {
+            isValidFormat = false;
+            formatErrorMsg = "আপনার ট্রানজেকশন আইডি  সঠিক  না । দয়া করে সঠিক ট্রানজেকশন দিন ";
+        }
+    }
+
+    if (!isValidFormat) {
+        return Swal.fire({ 
+            icon: 'error', 
+            title: 'ভুল ফরম্যাট', 
+            text: formatErrorMsg,
+            background: '#1a1a2e',
+            color: '#fff'
+        });
+    }
+
     toggleLoader(true);
 
     try {
-        // ৩. অ্যাডমিনের জন্য deposit_requests নোডে ডাটা পাঠানো
+        // ৪. ডাটাবেসে ডুপ্লিকেট ট্রানজেকশন আইডি চেক
         const requestRef = ref(db, 'deposit_requests');
+        const trxQuery = query(requestRef, orderByChild('trxId'), equalTo(trxId));
+        const trxSnapshot = await get(trxQuery);
+
+        if (trxSnapshot.exists()) {
+            toggleLoader(false);
+            return Swal.fire({
+                icon: 'error',
+                title: 'ব্যবহৃত TrxID!',
+                text: 'এই ট্রানজেকশন আইডিটি ইতিমধ্যে একবার ব্যবহার করা হয়েছে।',
+                background: '#1a1a2e',
+                color: '#fff'
+            });
+        }
+
+        // ৫. অ্যাডমিনের জন্য deposit_requests নোডে ডাটা পাঠানো
         const newRequestRef = push(requestRef);
-        
         await set(newRequestRef, {
             uid: currentUser.uid,
             username: currentUser.displayName || 'Unknown User',
@@ -3953,7 +4005,7 @@ async function verifyAutoPay(method) {
             date: new Date().toLocaleString()
         });
 
-        // ৪. ইউজারের ট্রানজেকশন হিস্ট্রিতে Pending হিসেবে দেখানো
+        // ৬. ইউজারের ট্রানজেকশন হিস্ট্রিতে Pending হিসেবে দেখানো
         const txKey = push(ref(db, 'transactions/' + currentUser.uid)).key;
         await set(ref(db, 'transactions/' + currentUser.uid + '/' + txKey), {
             type: `Deposit (${method})`,
@@ -3966,7 +4018,7 @@ async function verifyAutoPay(method) {
 
         toggleLoader(false);
         
-        // ৫. সফল হওয়ার মেসেজ
+        // ৭. সফল হওয়ার মেসেজ
         Swal.fire({
             icon: 'success',
             title: 'রিকোয়েস্ট সফল!',
@@ -4009,152 +4061,183 @@ async function verifyAutoPay(method) {
             });
         }, 1000);
     }
-
-    onAuthStateChanged(auth, (u) => {
+onAuthStateChanged(auth, async (u) => {
     const supportFab = document.querySelector('.fab-telegram');
     const reportFab = document.querySelector('.fab-report');
 
     if (u) {
-        // --- ইউজার লগইন থাকলে ইন্টারফেস আপডেট ---
-        if (supportFab) supportFab.style.display = 'flex';
-        if (reportFab) reportFab.style.display = 'flex';
+        const activeRootRef = ref(db, 'active_sessions');
+        const activeRef = ref(db, 'active_sessions/' + u.uid);
 
-        onValue(ref(db, 'users/' + u.uid), (snapshot) => {
-            // 🔥 সমাধান: নতুন ইউজারের ডাটাবেস প্রোফাইল তৈরি হতে কয়েক সেকেন্ড সময় লাগে।
-            // তাই ডাটা না পাওয়া পর্যন্ত আমরা অপেক্ষা করবো (রিটার্ন করবো), লগআউট করবো না।
-            if (!snapshot.exists()) {
-                console.log("Profile loading... wait");
-                return; // ❗ NEVER logout here
-            }
+        try {
+            const tx = await runTransaction(activeRootRef, (sessions) => {
+                sessions = sessions || {};
 
-            const userData = snapshot.val();
+                // আগেই active থাকলে allow
+                if (sessions[u.uid]) return sessions;
 
-            // 🔥 AUTO UNBAN CHECK
-            if (userData.status === 'banned' && userData.banUntil) {
-                if (Date.now() > userData.banUntil) {
-                    update(ref(db, `users/${u.uid}`), {
-                        status: 'active',
-                        banUntil: null,
-                        banReason: null
-                    });
-                }
-            }
-
-            // ১. অ্যাকাউন্ট স্ট্যাটাস চেক (ব্যান আছে কি না)
-            // BAN CHECK
-            if (userData.status === 'banned' && !blockShown) {
-                blockShown = true;
-
-                const reason = userData.banReason || "No reason";
-                const end = userData.banUntil || 0;
-
-                function formatTime(ms) {
-                    const d = Math.floor(ms / (1000 * 60 * 60 * 24));
-                    const h = Math.floor((ms / (1000 * 60 * 60)) % 24);
-                    const m = Math.floor((ms / (1000 * 60)) % 60);
-                    return `${d}d ${h}h ${m}m`;
+                // 80 এর বেশি হলে deny
+                if (Object.keys(sessions).length >= 80) {
+                    return; // abort transaction
                 }
 
-                let interval;
+                // slot reserve
+                sessions[u.uid] = { ts: Date.now() };
+                return sessions;
+            });
 
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Account ban!',
-                    html: `
-                        <div style="text-align:left">
-                            <div style="margin-bottom:10px;">
-                                আপনার আইডি কিছু দিনের জন্য ban করা হয়েছে।<br>
-                                নিচের টাইম শেষ হলে আবার লগইন করতে পারবেন। <br>
-                                কোনো সমস্যা থাকলে support এ যোগাযোগ করুন।
+            if (!tx.committed) {
+                document.body.innerHTML = `
+                    <div style="text-align:center; padding:50px; color:white; background:#0b0b15; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                        <i class="fas fa-server" style="font-size:50px; color:#ff9800; margin-bottom:20px;"></i>
+                        <h2 style="font-family: 'Hind Siliguri';">সার্ভার এখন ব্যস্ত!</h2>
+                        <p style="font-family: 'Hind Siliguri'; opacity:0.8;">দুঃখিত, বর্তমানে অ্যাপে অনেক ইউজার একটিভ আছে। দয়া করে ৫-১০ মিনিট পর আবার চেষ্টা করুন।</p>
+                        <button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; border-radius:20px; border:none; background:#ff9800; color:white; font-weight:bold;">RETRY</button>
+                    </div>`;
+                return;
+            }
+
+            onDisconnect(activeRef).remove();
+
+            if (supportFab) supportFab.style.display = 'flex';
+            if (reportFab) reportFab.style.display = 'flex';
+
+            onValue(ref(db, 'users/' + u.uid), (snapshot) => {
+                if (!snapshot.exists()) {
+                    console.log("Profile loading... wait");
+                    return;
+                }
+
+                cleanupOldRecords(u.uid);
+
+                const userData = snapshot.val();
+
+                if (userData.status === 'banned' && userData.banUntil) {
+                    if (Date.now() > userData.banUntil) {
+                        update(ref(db, `users/${u.uid}`), {
+                            status: 'active',
+                            banUntil: null,
+                            banReason: null
+                        });
+                    }
+                }
+
+                if (userData.status === 'banned' && !blockShown) {
+                    blockShown = true;
+
+                    const reason = userData.banReason || "No reason";
+                    const end = userData.banUntil || 0;
+
+                    function formatTime(ms) {
+                        const d = Math.floor(ms / (1000 * 60 * 60 * 24));
+                        const h = Math.floor((ms / (1000 * 60 * 60)) % 24);
+                        const m = Math.floor((ms / (1000 * 60)) % 60);
+                        return `${d}d ${h}h ${m}m`;
+                    }
+
+                    let interval;
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Account ban!',
+                        html: `
+                            <div style="text-align:left">
+                                <div style="margin-bottom:10px;">
+                                    আপনার আইডি কিছু দিনের জন্য ban করা হয়েছে।<br>
+                                    নিচের টাইম শেষ হলে আবার লগইন করতে পারবেন। <br>
+                                    কোনো সমস্যা থাকলে support এ যোগাযোগ করুন।
+                                </div>
+                                <b>Reason:</b> ${reason}<br><br>
+                                <b>Remaining:</b> <span id="ban-timer">Loading...</span>
                             </div>
-                            <b>Reason:</b> ${reason}<br><br>
-                            <b>Remaining:</b> <span id="ban-timer">Loading...</span>
-                        </div>
-                    `,
-                    allowOutsideClick: false,
-                    confirmButtonText: 'Logout'
-                }).then(() => {
-                    clearInterval(interval);
-                    auth.signOut().then(() => location.reload());
-                });
-
-                // 🔥 Live countdown
-                interval = setInterval(() => {
-                    const left = end - Date.now();
-
-                    if (left <= 0) {
+                        `,
+                        allowOutsideClick: false,
+                        confirmButtonText: 'Logout'
+                    }).then(() => {
                         clearInterval(interval);
-                        location.reload();
-                        return;
-                    }
+                        auth.signOut().then(() => location.reload());
+                    });
 
-                    const el = document.getElementById('ban-timer');
-                    if (el) {
-                        el.innerText = formatTime(left);
-                    }
-                }, 1000);
+                    interval = setInterval(() => {
+                        const left = end - Date.now();
 
-                return;
-            }
+                        if (left <= 0) {
+                            clearInterval(interval);
+                            location.reload();
+                            return;
+                        }
 
-            // 🔥 ২. DELETE (PERMANENT BAN)
-            if (userData.status === 'deleted' && !blockShown) {
-                blockShown = true;
+                        const el = document.getElementById('ban-timer');
+                        if (el) el.innerText = formatTime(left);
+                    }, 1000);
 
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Account Permanently Banned',
-                    text: 'আপনার আইডি permanently ban করা হয়েছে।',
-                    confirmButtonText: 'ঠিক আছে',
-                    allowOutsideClick: false,
-                    confirmButtonColor: '#d33'
-                }).then(() => {
-                    auth.signOut().then(() => { location.reload(); });
-                });
+                    return;
+                }
 
-                return;
-            }
+                if (userData.status === 'deleted' && !blockShown) {
+                    blockShown = true;
 
-            // ডাটা আপডেট (null check সহ যাতে console error না আসে)
-            depositBal = userData.deposit || 0;
-            winningBal = userData.winning || 0;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Account Permanently Banned',
+                        text: 'আপনার আইডি permanently ban করা হয়েছে।',
+                        confirmButtonText: 'ঠিক আছে',
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#d33'
+                    }).then(() => {
+                        auth.signOut().then(() => { location.reload(); });
+                    });
+
+                    return;
+                }
+
+                depositBal = userData.deposit || 0;
+                winningBal = userData.winning || 0;
+                
+                const depEl = document.getElementById('profile-bal-dep');
+                const winEl = document.getElementById('profile-bal-win');
+                const totalEl = document.getElementById('wallet-balance-display');
+                const withdrawEl = document.getElementById('withdraw-available');
+
+                if (depEl) depEl.innerText = depositBal;
+                if (winEl) winEl.innerText = winningBal;
+                if (totalEl) totalEl.innerText = (depositBal + winningBal);
+                if (withdrawEl) withdrawEl.innerText = winningBal;
+
+                const referEl = document.getElementById('refer-code-display');
+                if (referEl) {
+                    referEl.innerText = userData.myPromoCode ? userData.myPromoCode : "NO CODE";
+                }
+                
+                const phoneEl = document.getElementById('ep-phone');
+                if (userData.phone && phoneEl) phoneEl.value = userData.phone;
+            });
+
+            currentUser = u;
+            const nameEl = document.getElementById('profile-name');
+            const emailEl = document.getElementById('profile-email');
+            const mainEl = document.getElementById('main-content');
+            const authViewEl = document.getElementById('auth-view');
+            const tabEl = document.querySelector('.tab-bar');
+
+            if (nameEl) nameEl.innerText = u.displayName || 'User';
+            if (emailEl) emailEl.innerText = u.email;
+            if (mainEl) mainEl.style.display = 'block';
+            if (authViewEl) authViewEl.classList.remove('active');
+            if (tabEl) tabEl.classList.remove('hidden');
             
-            const depEl = document.getElementById('profile-bal-dep');
-            const winEl = document.getElementById('profile-bal-win');
-            const totalEl = document.getElementById('wallet-balance-display');
-            const withdrawEl = document.getElementById('withdraw-available');
+            showTab('home');
 
-            if(depEl) depEl.innerText = depositBal;
-            if(winEl) winEl.innerText = winningBal;
-            if(totalEl) totalEl.innerText = (depositBal + winningBal);
-            if(withdrawEl) withdrawEl.innerText = winningBal;
-
-            const referEl = document.getElementById('refer-code-display');
-            if(referEl) {
-                referEl.innerText = userData.myPromoCode ? userData.myPromoCode : "NO CODE";
-            }
-            
-            const phoneEl = document.getElementById('ep-phone');
-            if(userData.phone && phoneEl) phoneEl.value = userData.phone;
-        });
-
-        currentUser = u;
-        const nameEl = document.getElementById('profile-name');
-        const emailEl = document.getElementById('profile-email');
-        const mainEl = document.getElementById('main-content');
-        const authViewEl = document.getElementById('auth-view');
-        const tabEl = document.querySelector('.tab-bar');
-
-        if(nameEl) nameEl.innerText = u.displayName || 'User';
-        if(emailEl) emailEl.innerText = u.email;
-        if(mainEl) mainEl.style.display = 'block';
-        if(authViewEl) authViewEl.classList.remove('active');
-        if(tabEl) tabEl.classList.remove('hidden');
-        
-        showTab('home');
+        } catch (err) {
+            console.error(err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Connection error',
+                text: 'একটিভ ইউজার চেক করতে সমস্যা হয়েছে।'
+            });
+        }
 
     } else {
-        // --- ইউজার লগআউট থাকলে বাটন হাইড ---
         if (supportFab) supportFab.style.display = 'none';
         if (reportFab) reportFab.style.display = 'none';
 
@@ -4163,11 +4246,10 @@ async function verifyAutoPay(method) {
         const tabEl = document.querySelector('.tab-bar');
         const authViewEl = document.getElementById('auth-view');
 
-        if(mainEl) mainEl.style.display = 'none';
-        if(tabEl) tabEl.classList.add('hidden');
-        if(authViewEl) authViewEl.classList.add('active');
+        if (mainEl) mainEl.style.display = 'none';
+        if (tabEl) tabEl.classList.add('hidden');
+        if (authViewEl) authViewEl.classList.add('active');
 
-        // 🔥 রেফারেল কোড অটো-ফিল এবং পেজ ওপেন লজিক
         const urlParams = new URLSearchParams(window.location.search);
         const refCode = urlParams.get('ref');
 
@@ -4186,7 +4268,6 @@ async function verifyAutoPay(method) {
         }
     }
 });
-
 
 
     function toggleAuthMode(mode) {
@@ -4331,7 +4412,7 @@ window.toggleAuthMode = toggleAuthMode;
         return Swal.fire({
             icon: 'error',
             title: 'ভুল নম্বর!',
-            text: "দয়া করে সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন। নম্বরটি ১১ সংখ্যার কম বা বেশি হওয়া যাবে না।",
+            text: "দয়া করে সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন। নম্বরটি ১১ সংখ্যার কম বা বেশি হওয়া যাবে পণ্ডিত না।",
             confirmButtonColor: '#D32F2F'
         });
     }
@@ -4522,7 +4603,7 @@ function fallbackCopyTextSelection(text) {
          if(!l) return;
          l.innerHTML = "<div style='padding:20px; text-align:center;'>Loading...</div>";
          if(!currentUser) return;
-         onValue(ref(db, 'transactions/'+currentUser.uid), s => {
+         get(query(ref(db, 'transactions/'+currentUser.uid), limitToLast(20))).then(s => {
              l.innerHTML = "";
              const d = s.val();
              if(d) {
@@ -4552,17 +4633,17 @@ function fallbackCopyTextSelection(text) {
     const badge = document.getElementById('menu-notif-badge');
     if (!l || !currentUser) return;
 
-    onValue(ref(db, `users/${currentUser.uid}/read_notifications`), (readSnap) => {
+    get(ref(db, `users/${currentUser.uid}/read_notifications`)).then((readSnap) => {
         const readIds = readSnap.val() || {};
 
-        onValue(ref(db, `users/${currentUser.uid}/deleted_notifications`), (delSnap) => {
+        get(ref(db, `users/${currentUser.uid}/deleted_notifications`)).then((delSnap) => {
             const deletedIds = delSnap.val() || {};
 
             // ১. 'notifications' (সবার জন্য) নোড চেক করা
-            onValue(ref(db, 'notifications'), (allSnap) => {
+            get(query(ref(db, 'notifications'), limitToLast(20))).then((allSnap) => {
                 
                 // ২. 'user_notifications/UID' (পার্সোনাল) নোড চেক করা
-                onValue(ref(db, `user_notifications/${currentUser.uid}`), (personalSnap) => {
+                get(ref(db, `user_notifications/${currentUser.uid}`)).then((personalSnap) => {
                     
                     l.innerHTML = "";
                     let combinedNotifs = [];
@@ -4923,6 +5004,79 @@ window.shareReferLink = function() {
     }
 };
 
+async function cleanupOldRecords(uid) {
+    try {
+        const now = Date.now();
+        const tenHoursMs = 10 * 60 * 60 * 1000;
+
+        const getValidTime = (item) => {
+    if (item.timestamp) return Number(item.timestamp);
+    
+    let timeStr = item.date || item.time;
+    if (timeStr && typeof timeStr === 'string') {
+        try {
+            // Regex দিয়ে সংখ্যাগুলো আলাদা করা (Day, Month, Year, Hour, Min, Sec)
+            const p = timeStr.match(/\d+/g).map(Number); 
+            
+            if (p && p.length >= 3) {
+                // p[0]=Day, p[1]=Month, p[2]=Year, p[3]=Hour, p[4]=Min, p[5]=Sec
+                // মাস থেকে ১ বিয়োগ করতে হয় কারণ JS এ মাস ০ থেকে শুরু হয়
+                const dateObj = new Date(p[2], p[1] - 1, p[0], p[3] || 0, p[4] || 0, p[5] || 0);
+                return dateObj.getTime(); // এটি মিলিসেকেন্ড ভ্যালু দিবে
+            }
+        } catch (e) { return 0; }
+    }
+    return 0; 
+};
+
+
+        const processCleanup = async (path) => {
+            const dataRef = ref(db, path);
+            const snap = await get(dataRef);
+            
+            if (snap.exists()) {
+                let items = [];
+                snap.forEach(child => {
+                    items.push({ key: child.key, ...child.val() });
+                });
+
+                // ১. সময় অনুযায়ী সর্টিং (সবচেয়ে নতুন ডেটা থাকবে সবার উপরে/শুরুতে)
+                items.sort((a, b) => getValidTime(b) - getValidTime(a));
+
+                // ২. প্রথম ৩টি (নতুনগুলো) বাদে বাকি সব ডিলিট লিস্টে যাবে
+                const toDelete = items.slice(3); 
+                
+                const deletePromises = [];
+
+                // ৩. ৩টার বাইরের সব রেকর্ড ডিলিট
+                toDelete.forEach(item => {
+                    deletePromises.push(remove(ref(db, `${path}/${item.key}`)));
+                });
+
+                // ৪. প্রথম ৩টির মধ্যেও যদি কেউ ১০ ঘণ্টার বেশি পুরনো হয়, তাকেও ডিলিট
+                const topThree = items.slice(0, 3);
+                topThree.forEach(item => {
+                    let itemTime = getValidTime(item);
+                    if (itemTime > 0 && (now - itemTime) > tenHoursMs) {
+                        deletePromises.push(remove(ref(db, `${path}/${item.key}`)));
+                    }
+                });
+
+                if (deletePromises.length > 0) {
+                    await Promise.all(deletePromises);
+                }
+            }
+        };
+
+        await processCleanup(`transactions/${uid}`);
+        await processCleanup(`user_notifications/${uid}`);
+
+    } catch (error) {
+        console.error("Cleanup Error:", error);
+    }
+}
+
+
 
 </script>
 
@@ -4952,7 +5106,6 @@ window.shareReferLink = function() {
         to { transform: translateY(0); opacity: 1; }
     }
 </style>
-
 
 
 </body>
