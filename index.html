@@ -34,6 +34,62 @@
         
         /* Wallet Specific Colors */
         --wallet-gradient: linear-gradient(135deg, #2b1055, #7597de);
+     
+
+        /* pyment card css */
+        
+        
+        .payment-method-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px; /* গ্যাপ বাড়ানো হয়েছে */
+    padding: 15px;
+}
+
+.payment-method-card {
+    background: #ffffff;
+    border-radius: 24px; /* কোণাগুলো আরও রাউন্ড করা হয়েছে */
+    padding: 30px 15px; /* প্যাডিং বাড়ানো হয়েছে */
+    text-align: center;
+    border: 2px solid #f0f0f0; /* হালকা বর্ডার দেওয়া হয়েছে */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06); /* শ্যাডো আরও স্মুথ করা হয়েছে */
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px; /* উচ্চতা ১৮০ পিক্সেল করা হয়েছে */
+}
+
+.payment-method-card.active {
+    border-color: #E2136E;
+    background: #fff5f8;
+    transform: translateY(-5px); /* সিলেক্ট করলে কার্ড একটু উপরে উঠবে */
+}
+
+.payment-method-card img {
+    width: 85px; /* লোগো অনেক বড় করা হয়েছে */
+    height: 85px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+.pm-label {
+    font-size: 19px; /* মেইন লেখা বড় করা হয়েছে */
+    font-weight: 800;
+    color: #222;
+    margin-bottom: 6px;
+}
+
+.pm-sub {
+    font-size: 13px; /* সাব-টেক্সট বড় করা হয়েছে */
+    color: #666;
+    font-weight: 600;
+}
+
+        
+        
         
         /* Payment Colors */
         --bkash-color: #E2136E;
@@ -1530,6 +1586,224 @@
         transition: background 0.3s;
     }
 
+
+    /* --- NEW PAYMENT FLOW PAGES --- */
+    .payment-method-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 15px;
+    }
+
+    .payment-method-card {
+        background: white;
+        border-radius: 14px;
+        padding: 14px 10px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        border: 2px solid transparent;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .payment-method-card.active {
+        border-color: var(--primary);
+        transform: translateY(-1px);
+    }
+
+    .payment-method-card i {
+        font-size: 26px;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .payment-method-card .pm-label {
+        font-weight: 900;
+        font-size: 14px;
+        color: #222;
+    }
+
+    .payment-method-card .pm-sub {
+        font-size: 11px;
+        color: #777;
+        margin-top: 4px;
+    }
+
+    .payment-flow-container {
+        padding: 15px;
+    }
+
+    .payment-flow-card {
+        background: white;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        border: 1px solid #eee;
+    }
+
+    .payment-flow-header {
+        padding: 18px 18px 14px;
+        color: white;
+        background: linear-gradient(135deg, #3F51B5, #5E35B1);
+    }
+
+    .payment-flow-header.bkash { background: linear-gradient(135deg, #E2136E, #ff4d94); }
+    .payment-flow-header.rocket { background: linear-gradient(135deg, #8C3494, #b06ab3); }
+    .payment-flow-header.nagad { background: linear-gradient(135deg, #F7941D, #ffb347); }
+    .payment-flow-header.card { background: linear-gradient(135deg, #263238, #455A64); }
+
+    .payment-flow-title {
+        font-size: 20px;
+        font-weight: 900;
+        margin-bottom: 4px;
+    }
+
+    .payment-flow-desc {
+        font-size: 12px;
+        opacity: 0.92;
+        line-height: 1.5;
+    }
+
+    .payment-step {
+        display: none;
+        padding: 18px;
+        background: #fff;
+    }
+
+    .payment-step.active {
+        display: block;
+    }
+
+    .payment-step-title {
+        font-size: 16px;
+        font-weight: 900;
+        color: #222;
+        margin-bottom: 12px;
+    }
+
+    .payment-helper {
+        background: #f8f9fe;
+        border: 1px solid #e8ebf7;
+        border-radius: 14px;
+        padding: 14px;
+        color: #333;
+        font-size: 13px;
+        line-height: 1.7;
+        margin-bottom: 15px;
+    }
+
+    .payment-number-card {
+        background: linear-gradient(135deg, #111827, #374151);
+        color: white;
+        border-radius: 14px;
+        padding: 16px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .payment-number-main {
+        font-size: 20px;
+        font-weight: 900;
+        letter-spacing: 1px;
+    }
+
+    .payment-number-sub {
+        font-size: 11px;
+        color: rgba(255,255,255,0.8);
+        margin-top: 2px;
+    }
+
+    .payment-mini-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .payment-mini-box {
+        background: #f7f7fb;
+        border: 1px solid #ececf5;
+        border-radius: 12px;
+        padding: 12px;
+    }
+
+    .payment-mini-box .label {
+        font-size: 11px;
+        font-weight: 800;
+        color: #666;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+    }
+
+    .payment-mini-box .value {
+        font-size: 15px;
+        font-weight: 900;
+        color: #111;
+    }
+
+    .payment-step .input-field {
+        margin-bottom: 12px;
+        border-radius: 12px;
+        padding: 14px 12px;
+        font-size: 15px;
+    }
+
+    .payment-step-btn {
+        width: 100%;
+        border: none;
+        border-radius: 14px;
+        padding: 14px 16px;
+        font-size: 16px;
+        font-weight: 900;
+        color: white;
+        background: linear-gradient(135deg, #3F51B5, #5E35B1);
+        box-shadow: 0 6px 18px rgba(63,81,181,0.25);
+        cursor: pointer;
+        text-transform: uppercase;
+    }
+
+    .payment-step-btn.bkash { background: linear-gradient(135deg, #E2136E, #ff4d94); }
+    .payment-step-btn.rocket { background: linear-gradient(135deg, #8C3494, #b06ab3); }
+    .payment-step-btn.nagad { background: linear-gradient(135deg, #F7941D, #ffb347); }
+    .payment-step-btn.card { background: linear-gradient(135deg, #263238, #455A64); }
+
+    .payment-step-btn:active { transform: scale(0.98); }
+
+    .payment-back-btn {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.35);
+        color: white;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+    }
+
+    .payment-note-list {
+        margin: 0;
+        padding-left: 18px;
+        color: #444;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .payment-note-list li {
+        margin-bottom: 6px;
+    }
+
+    .payment-verify-box {
+        background: #fff8fb;
+        border: 1px solid #ffd6e7;
+        border-radius: 14px;
+        padding: 14px;
+        margin-bottom: 14px;
+    }
+
     /* --- WITHDRAW PAGE --- */
     .withdraw-new-container { background: black; min-height: 100vh; padding: 20px; }
     .withdraw-balance-card { background: white; border-radius: 12px; padding: 30px 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
@@ -2403,120 +2677,135 @@
         </div>
     </section>
 
+
     <!-- ADD MONEY PAGE -->
 <section id="add-money-view" class="app-section">
     <div class="back-nav" onclick="window.navigateSub('wallet')"><i class="fas fa-arrow-left"></i> Add Money</div>
-    
-    <div class="am-method-grid">
-        <div class="am-card active" id="tab-bkash" onclick="window.switchPayTab('bkash')">
-            <i class="fas fa-check-circle am-check"></i>
-            <img src="https://i.ibb.co.com/qF1xD5xj/image-search-1769091253468.png" alt="bKash">
-            <span>bKash</span>
-        </div>
-        <div class="am-card" id="tab-rocket" onclick="window.switchPayTab('rocket')">
-            <i class="fas fa-check-circle am-check"></i>
-            <img src="https://i.ibb.co.com/MDt4TzDf/image-search-1769091463880.png" alt="Rocket">
-            <span>Rocket</span>
-        </div>
-        <div class="am-card" id="tab-nagad" onclick="window.switchPayTab('nagad')">
-            <i class="fas fa-check-circle am-check"></i>
-            <img src="https://i.ibb.co.com/4gmdTj1f/image-search-1769091285966.png" alt="Nagad">
-            <span>Nagad</span>
+
+    <div style="padding: 16px 15px 5px;">
+        <div style="background: linear-gradient(135deg, #3F51B5, #5E35B1); color: white; border-radius: 16px; padding: 18px; box-shadow: 0 8px 20px rgba(63,81,181,0.18);">
+            <div style="font-size: 20px; font-weight: 900; margin-bottom: 6px;">Select Your Payment Method</div>
+            <div style="font-size: 13px; line-height: 1.6; opacity: 0.95;">
+              আপনার পছন্দের মেথড বাছাই করেন যেমন:[  bKash, Nagad, Rocket বা Card ] । তারপর  amount, sender number + TNX দিয়ে verify করুন .
+            </div>
         </div>
     </div>
 
-    <div class="am-content-container">
-        <div id="content-bkash" class="am-box bkash">
-            <div class="am-title">টাকার পরিমাণ ও ট্রানজেকশন আইডি দিন</div>
-            <input type="number" id="amount-bkash" class="am-input" placeholder="টাকার পরিমাণ (Amount)" style="margin-bottom:10px;">
-            <input type="text" id="trx-bkash" class="am-input" placeholder="ট্রানজেকশন আইডি (TrxID)">
-            
-            <ul class="am-list">
-                <li>১. বিকাশ <b>App</b> অথবা মেনু <b>*247#</b> ডায়াল করে নিচের নাম্বারে টাকা পাঠান।</li>
-                <li style="color:#FFEB3B; font-weight:bold;">অ্যাকশন: Send Money</li>
-            </ul>
-            
-            <div class="am-num-row" style="border: 1px solid #ffffff33; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
-                <div>
-                    <span id="bkash-num-display" style="font-size: 18px; font-weight: bold; letter-spacing: 1px; color: #fff;">Loading...</span><br>
-                    <span style="font-weight:400; color:#aaa; font-size:11px;">(Send Money Number)</span>
-                </div>
-                <button class="am-copy-btn" onclick="window.copyToClipboard('bkash-num-display')" style="margin: 0; padding: 8px 15px;"><i class="far fa-copy"></i> Copy</button>
-            </div>
-
-            <ul class="am-list" style="margin-top:10px;">
-                <li>• এই নাম্বারে যেকোনো পরিমাণ টাকা পাঠাতে পারেন।</li>
-                <li style="color:#FFEB3B; font-weight:bold;">• টাকা পাঠিয়ে উপরের বক্সে পরিমাণ এবং TrxID দিন।</li>
-                <li style="color:#00ff88; font-weight:bold;">• এরপর নিচের VERIFY বাটনে ক্লিক করুন।</li>
-                <li style="color:#90EE90; margin-top: 10px; background: rgba(144, 238, 144, 0.1); padding: 10px; border-radius: 8px; border-left: 4px solid #90EE90;">
-                    <b>⚠️ নোট: আপনার অ্যাকাউন্টে টাকা পেতে সর্বোচ্চ ২৪ ঘন্টা সময় লাগতে পারে। তার বেশি সময় লাগলে সাপোর্টে এসএমএস দিবেন। দয়া করে এর আগে সাপোর্ট এসএমএস দিবেন না।</b>
-                </li>
-            </ul>
-        </div>
-
-        <div id="content-rocket" class="am-box rocket" style="display:none;">
-            <div class="am-title">টাকার পরিমাণ ও ট্রানজেকশন আইডি দিন</div>
-            <input type="number" id="amount-rocket" class="am-input" placeholder="টাকার পরিমাণ (Amount)" style="margin-bottom:10px;">
-            <input type="text" id="trx-rocket" class="am-input" placeholder="ট্রানজেকশন আইডি (TrxID)">
-            
-            <ul class="am-list">
-                <li>১. রকেট <b>App</b> অথবা মেনু <b>*322#</b> ডায়াল করে নিচের নাম্বারে টাকা পাঠান।</li>
-                <li style="color:#FFEB3B; font-weight:bold;">অ্যাকশন: Send Money</li>
-            </ul>
-
-            <div class="am-num-row" style="border: 1px solid #ffffff33; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
-                <div>
-                    <span id="rocket-num-display" style="font-size: 18px; font-weight: bold; letter-spacing: 1px; color: #fff;">Loading...</span><br>
-                    <span style="font-weight:400; color:#aaa; font-size:11px;">(Send Money Number)</span>
-                </div>
-                <button class="am-copy-btn" onclick="window.copyToClipboard('rocket-num-display')" style="margin: 0; padding: 8px 15px;"><i class="far fa-copy"></i> Copy</button>
-            </div>
-
-            <ul class="am-list" style="margin-top:10px;">
-                <li>• এই নাম্বারে যেকোনো পরিমাণ টাকা পাঠাতে পারেন।</li>
-                <li style="color:#FFEB3B; font-weight:bold;">• টাকা পাঠিয়ে উপরের বক্সে পরিমাণ এবং TrxID দিন।</li>
-                <li style="color:#00ff88; font-weight:bold;">• এরপর নিচের VERIFY বাটনে ক্লিক করুন।</li>
-                <li style="color:#90EE90; margin-top: 10px; background: rgba(144, 238, 144, 0.1); padding: 10px; border-radius: 8px; border-left: 4px solid #90EE90;">
-                    <b>⚠️ নোট: আপনার অ্যাকাউন্টে টাকা পেতে সর্বোচ্চ ২৪ ঘন্টা সময় লাগতে পারে। তার বেশি সময় লাগলে সাপোর্টে এসএমএস দিবেন। দয়া করে এর আগে সাপোর্ট এসএমএস দিবেন না।</b>
-                </li>
-            </ul>
-        </div>
-
-        <div id="content-nagad" class="am-box nagad" style="display:none;">
-            <div class="am-title">টাকার পরিমাণ ও ট্রানজেকশন আইডি দিন</div>
-            <input type="number" id="amount-nagad" class="am-input" placeholder="টাকার পরিমাণ (Amount)" style="margin-bottom:10px;">
-            <input type="text" id="trx-nagad" class="am-input" placeholder="ট্রানজেকশন আইডি (TrxID)">
-            
-            <ul class="am-list">
-                <li>১. নগদ <b>App</b> অথবা মেনু <b>*167#</b> ডায়াল করে নিচের নাম্বারে টাকা পাঠান।</li>
-                <li style="color:#FFEB3B; font-weight:bold;">অ্যাকশন: Send Money</li>
-            </ul>
-
-            <div class="am-num-row" style="border: 1px solid #ffffff33; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
-                <div>
-                    <span id="nagad-num-display" style="font-size: 18px; font-weight: bold; letter-spacing: 1px; color: #fff;">Loading...</span><br>
-                    <span style="font-weight:400; color:#aaa; font-size:11px;">(Send Money Number)</span>
-                </div>
-                <button class="am-copy-btn" onclick="window.copyToClipboard('nagad-num-display')" style="margin: 0; padding: 8px 15px;"><i class="far fa-copy"></i> Copy</button>
-            </div>
-
-            <ul class="am-list" style="margin-top:10px;">
-                <li>• এই নাম্বারে যেকোনো পরিমাণ টাকা পাঠাতে পারেন।</li>
-                <li style="color:#FFEB3B; font-weight:bold;">• টাকা পাঠিয়ে উপরের বক্সে পরিমাণ এবং TrxID দিন।</li>
-                <li style="color:#00ff88; font-weight:bold;">• এরপর নিচের VERIFY বাটনে ক্লিক করুন।</li>
-                <li style="color:#90EE90; margin-top: 10px; background: rgba(144, 238, 144, 0.1); padding: 10px; border-radius: 8px; border-left: 4px solid #90EE90;">
-                    <b>⚠️ নোট: আপনার অ্যাকাউন্টে টাকা পেতে সর্বোচ্চ ২৪ ঘন্টা সময় লাগতে পারে। তার বেশি সময় লাগলে সাপোর্টে এসএমএস দিবেন। দয়া করে এর আগে সাপোর্ট এসএমএস দিবেন না।</b>
-                </li>
-            </ul>
-        </div>
-
-        <button class="am-verify-btn" onclick="window.triggerVerify()">VERIFY</button>
+    <div class="payment-method-grid">
+    <div class="payment-method-card " onclick="window.openPaymentFlow('bkash')">
+        <img src="https://i.ibb.co.com/qF1xD5xj/image-search-1769091253468.png" alt="bKash">
+        <div class="pm-label">bKash</div>
+        <div class="pm-sub">Automatic App/Manual</div>
     </div>
+
+    <div class="payment-method-card" onclick="window.openPaymentFlow('nagad')">
+        <img src="https://i.ibb.co.com/4gmdTj1f/image-search-1769091285966.png" alt="Nagad">
+        <div class="pm-label">Nagad</div>
+        <div class="pm-sub">Send Money Flow</div>
+    </div>
+
+    <div class="payment-method-card" onclick="window.openPaymentFlow('rocket')">
+        <img src="https://i.ibb.co.com/MDt4TzDf/image-search-1769091463880.png" alt="Rocket">
+        <div class="pm-label">Rocket</div>
+        <div class="pm-sub">Send Money Flow</div>
+    </div>
+
+    <div class="payment-method-card" onclick="window.openPaymentFlow('card')">
+        <img src="https://cdn-icons-png.flaticon.com/512/349/349221.png" alt="Card">
+        <div class="pm-label">Online Card</div>
+        <div class="pm-sub">Visa / Mastercard</div>
+    </div>
+</div>
+
+
 </section>
 
+<section id="payment-flow-view" class="app-section">
+    <div class="back-nav" onclick="window.backToAddMoney()"><i class="fas fa-arrow-left"></i> <span id="payment-back-title">Payment</span></div>
+    <div class="payment-flow-container">
+        <div class="payment-flow-card">
+            <div id="payment-flow-header" class="payment-flow-header bkash">
+                <div class="payment-flow-title" id="payment-flow-title">bKash Payment</div>
+                <div class="payment-flow-desc" id="payment-flow-desc">Amount → Agent Number → sender number + TNX verification</div>
+            </div>
 
+            <div id="payment-step-1" class="payment-step active">
+                <div class="payment-step-title">Step 1: Enter Amount</div>
+                <div class="payment-helper">
+                    প্রথমে কত টাকা add করতে চান সেটা লিখুন। তারপর Continue চাপুন।
+                </div>
+                <input type="number" id="payment-amount" class="input-field" placeholder="Amount">
+                <button id="payment-step-1-btn" class="payment-step-btn bkash" onclick="window.continuePaymentFlow()">• Continue •</button>
+            </div>
 
+            <div id="payment-step-2" class="payment-step">
+                <div class="payment-step-title">Step 2: Send Money Instruction</div>
+                <div class="payment-helper" id="payment-instruction-text">
+                    আপনার payment details এখানে দেখাবে।
+                </div>
 
+                <div class="payment-number-card">
+                    <div>
+                        <div class="payment-number-main" id="payment-agent-number">Loading...</div>
+                        <div class="payment-number-sub" id="payment-agent-sub">Agent / Merchant Number</div>
+                    </div>
+                    <button class="am-copy-btn" style="padding: 8px 14px;" onclick="window.copyToClipboard('payment-agent-number')">
+                        <i class="far fa-copy"></i> Copy
+                    </button>
+                </div>
+
+                <div class="payment-mini-row">
+                    <div class="payment-mini-box">
+                        <div class="label">Method</div>
+                        <div class="value" id="payment-mini-method">bKash</div>
+                    </div>
+                    <div class="payment-mini-box">
+                        <div class="label">Amount</div>
+                        <div class="value">BDT <span id="payment-mini-amount">0</span></div>
+                    </div>
+                </div>
+
+                <ul class="payment-note-list">
+<li style="list-style: none; margin-bottom: 15px; border: 1px solid #e0e0e0; padding: 12px; border-radius: 12px; display: flex; align-items: center; background: #fdfdfd;">
+    <div style="background: #333; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: bold; flex-shrink: 0;">১</div>
+    <span style="color: #222; font-size: 15px;">উপরের নাম্বারে <b style="color: #000;">Send Money</b> করুন।</span>
+</li>
+
+<li style="list-style: none; margin-bottom: 15px; border: 1px solid #e0e0e0; padding: 12px; border-radius: 12px; display: flex; align-items: center; background: #fdfdfd;">
+    <div style="background: #333; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: bold; flex-shrink: 0;">২</div>
+    <span style="color: #222; font-size: 15px;">টাকা পাঠানোর পর নিচের <b style="color: #000;">Continue</b> বাটনে ক্লিক করুন।</span>
+</li>
+
+<li style="list-style: none; color: #1b5e20; background: #e8f5e9; padding: 15px; border-radius: 12px; border-left: 5px solid #2e7d32; font-size: 14px; line-height: 1.5; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+    <div style="display: flex; align-items: flex-start;">
+        <span style="font-size: 20px; margin-right: 10px;">⚠️</span>
+        <span>
+            <b style="font-size: 16px; display: block; margin-bottom: 4px;">সতর্কতা নোট:</b>
+            সাবমিট করার পর ব্যালেন্স যোগ হতে <b>৫ মিনিট থেকে ২৪ ঘণ্টা</b> সময় লাগতে পারে। অনুগ্রহ করে এর আগে সাপোর্টে যোগাযোগ করবেন না।
+        </span>
+    </div>
+</li>
+
+                </ul>
+
+                <button id="payment-step-2-btn" class="payment-step-btn bkash" style="margin-top: 14px;" onclick="window.goPaymentVerifyStep()"> • Continue •</button>
+            </div>
+
+            <div id="payment-step-3" class="payment-step">
+                <div class="payment-step-title">Step 3: Verify Sender & TNX</div>
+                <div class="payment-verify-box">
+                    <div style="font-size: 13px; color:#666; line-height:1.7;">
+                        এখন আপনার sender number এবং TNX লিখে verify করুন।
+                    </div>
+                </div>
+
+                <input type="number" id="payment-sender" class="input-field" placeholder="Sender Number (11 digits)">
+                <input type="text" id="payment-tnx" class="input-field" placeholder="TNX / Transaction ID">
+                <button id="payment-step-3-btn" class="payment-step-btn bkash" onclick="window.triggerVerify()">★*VERIFY*★</button>
+            </div>
+        </div>
+    </div>
+</section>
 
     <!-- WITHDRAW VIEW -->
     <section id="withdraw-view" class="app-section">
@@ -2781,10 +3070,12 @@ let blockShown = false;
     let supportLink = "";
     let reportLink = "";
     let currentPayMethod = 'bkash';
+    let paymentFlowState = { method: 'bkash', amount: 0 };
+    let paymentNumbers = { bkash: '', rocket: '', nagad: '', card: '' };
     let allParticipants = {};
 
     // Expose functions to window
-    window.verifyAutoPay = verifyAutoPay;
+    window.verifyAutoPay = verifyPaymentFlow;
     window.emailLogin = emailLogin;
     window.emailRegister = emailRegister;
     window.handleLogout = handleLogout;
@@ -2868,7 +3159,7 @@ let blockShown = false;
 // আপনার বর্তমান অ্যাপের ভার্সন কোড (এটি প্রতিবার আপডেট দেওয়ার সময় ১ করে বাড়াবেন)
 // version (প্রতি update এ change করবা)
 // version
-const APP_VERSION_CODE =3;
+const APP_VERSION_CODE =4;
 
 get(ref(db, 'app_settings')).then(s => {
     const d = s.val();
@@ -2929,9 +3220,24 @@ get(ref(db, 'app_settings')).then(s => {
         
         // ... (বাকি সেটিংস এবং ব্যানার কোড আগের মত থাকবে)
         if (d.notice) document.getElementById('dynamic-notice').innerText = d.notice;
-        if (d.bkash_number) document.getElementById('bkash-num-display').innerText = d.bkash_number;
-        if (d.nagad_number) document.getElementById('nagad-num-display').innerText = d.nagad_number;
-        if (d.rocket_number) document.getElementById('rocket-num-display').innerText = d.rocket_number;
+        if (d.bkash_number) {
+            paymentNumbers.bkash = d.bkash_number;
+            const el = document.getElementById('bkash-num-display');
+            if (el) el.innerText = d.bkash_number;
+        }
+        if (d.nagad_number) {
+            paymentNumbers.nagad = d.nagad_number;
+            const el = document.getElementById('nagad-num-display');
+            if (el) el.innerText = d.nagad_number;
+        }
+        if (d.rocket_number) {
+            paymentNumbers.rocket = d.rocket_number;
+            const el = document.getElementById('rocket-num-display');
+            if (el) el.innerText = d.rocket_number;
+        }
+        if (d.card_number) {
+            paymentNumbers.card = d.card_number;
+        }
 
         videoLinks.addMoney = d.how_to_add_money_link;
         videoLinks.getRoom = d.how_to_get_room_id_link;
@@ -3106,6 +3412,7 @@ window.processInAppUpdate = function(fileUrl) {
             document.querySelector('.tab-bar').classList.add('hidden');
             const targetId = t === 'wallet' ? 'wallet-view' : 
                            t === 'add-money' ? 'add-money-view' : 
+                           t === 'payment-flow' ? 'payment-flow-view' :
                            t === 'withdraw' ? 'withdraw-view' :
                            t === 'history' ? 'history-view' :
                            t === 'notifications' ? 'notifications-view' :
@@ -3940,166 +4247,380 @@ window.saveProfile = saveProfile;
     }
 
 
-    function switchPayTab(t) {
-        currentPayMethod = t;
-        document.querySelectorAll('.am-card').forEach(e=>e.classList.remove('active'));
-        document.getElementById(`tab-${t}`).classList.add('active');
-        document.querySelectorAll('.am-box').forEach(e=>e.style.display='none');
-        document.getElementById(`content-${t}`).style.display='block';
-        const btn = document.querySelector('.am-verify-btn');
-        if(t === 'bkash') btn.style.backgroundColor = '#E2136E';
-        if(t === 'rocket') btn.style.backgroundColor = '#8C3494';
-        if(t === 'nagad') btn.style.backgroundColor = '#F7941D';
+
+    
+function getPaymentMeta(method) {
+        const normalized = String(method || 'bkash').toLowerCase();
+        const meta = {
+            bkash: {
+                label: 'bKash Payment',
+                colorClass: 'bkash',
+                accent: '#E2136E',
+                title: 'bKash Send Money',
+                instruction: 'BKash app বা *247# ব্যবহার করে নিচের নাম্বারে টাকা পাঠান।',
+                agentLabel: 'BKash Send Money Number',
+                agentSub: 'Send Money Number'
+            },
+            rocket: {
+                label: 'Rocket Payment',
+                colorClass: 'rocket',
+                accent: '#8C3494',
+                title: 'Rocket Send Money',
+                instruction: 'Rocket app বা *322# ব্যবহার করে নিচের নাম্বারে টাকা পাঠান।',
+                agentLabel: 'Rocket Send Money Number',
+                agentSub: 'Send Money Number'
+            },
+            nagad: {
+                label: 'Nagad Payment',
+                colorClass: 'nagad',
+                accent: '#F7941D',
+                title: 'Nagad Send Money',
+                instruction: 'Nagad app বা *167# ব্যবহার করে নিচের নাম্বারে টাকা পাঠান।',
+                agentLabel: 'Nagad Send Money Number',
+                agentSub: 'Send Money Number'
+            },
+            card: {
+                label: 'Card Payment',
+                colorClass: 'card',
+                accent: '#263238',
+                title: 'Online Card Payment',
+                instruction: 'Card payment flow open হয়েছে। Admin দেওয়া payment details follow করুন।',
+                agentLabel: 'Card / Merchant Reference',
+                agentSub: 'Card / Merchant Number'
+            }
+        };
+        return meta[normalized] || meta.bkash;
     }
 
-    // আপনার নির্দেশমতো ফাংশন নেম সেম রাখা হয়েছে
-function triggerVerify() { 
-    verifyAutoPay(currentPayMethod); 
+    function normalizePaymentMethod(method) {
+        const normalized = String(method || 'bkash').toLowerCase();
+        return ['bkash', 'rocket', 'nagad', 'card'].includes(normalized) ? normalized : 'bkash';
+    }
+
+    function setPaymentStep(step) {
+        ['payment-step-1', 'payment-step-2', 'payment-step-3'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.remove('active');
+        });
+        const target = document.getElementById(`payment-step-${step}`);
+        if (target) target.classList.add('active');
+    }
+
+    function getPaymentField(id) {
+        return document.getElementById(id);
+    }
+
+    function getLegacyPaymentField(method, prefix) {
+        const m = normalizePaymentMethod(method);
+        return (
+            document.getElementById(`${prefix}-${m}`) ||
+            document.getElementById(`${prefix}-${method}`) ||
+            document.getElementById(prefix)
+        );
+    }
+
+    function updatePaymentUI(method) {
+        const normalized = normalizePaymentMethod(method);
+        const meta = getPaymentMeta(normalized);
+        const header = getPaymentField('payment-flow-header');
+        const title = getPaymentField('payment-flow-title');
+        const desc = getPaymentField('payment-flow-desc');
+        const backTitle = getPaymentField('payment-back-title');
+        const step1Btn = getPaymentField('payment-step-1-btn');
+        const step2Btn = getPaymentField('payment-step-2-btn');
+        const step3Btn = getPaymentField('payment-step-3-btn');
+        const miniMethod = getPaymentField('payment-mini-method');
+        const instruction = getPaymentField('payment-instruction-text');
+        const agent = getPaymentField('payment-agent-number');
+        const agentSub = getPaymentField('payment-agent-sub');
+
+        if (header) header.className = `payment-flow-header ${meta.colorClass}`;
+        if (title) title.innerText = meta.label;
+        if (desc) desc.innerText = 'Amount → Agent Number → sender number + TNX verification';
+        if (backTitle) backTitle.innerText = meta.label;
+
+        if (step1Btn) step1Btn.className = `payment-step-btn ${meta.colorClass}`;
+        if (step2Btn) step2Btn.className = `payment-step-btn ${meta.colorClass}`;
+        if (step3Btn) step3Btn.className = `payment-step-btn ${meta.colorClass}`;
+
+        if (miniMethod) miniMethod.innerText = meta.label.replace(' Payment', '');
+        if (instruction) instruction.innerText = meta.instruction;
+        if (agent) agent.innerText = (paymentNumbers && paymentNumbers[normalized]) ? paymentNumbers[normalized] : 'Number Not Set';
+        if (agentSub) agentSub.innerText = meta.agentSub;
+    }
+
+    function resetPaymentInputs() {
+        ['payment-amount', 'payment-sender', 'payment-tnx'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+    }
+
+    function showAddMoneyView() {
+        document.querySelectorAll('.app-section').forEach(e => e.classList.remove('active'));
+        const view = document.getElementById('add-money-view');
+        if (view) view.classList.add('active');
+
+        document.body.classList.add('sub-page');
+        const tabBar = document.querySelector('.tab-bar');
+        if (tabBar) tabBar.classList.add('hidden');
+    }
+    
+     
+
+     
+    function openPaymentFlow(method) {
+    currentPayMethod = normalizePaymentMethod(method);
+    paymentFlowState.method = currentPayMethod;
+    paymentFlowState.amount = 0;
+
+    // --- কালার পরিবর্তনের অংশটি বাদ দেওয়া হয়েছে ---
+    // এখন আর কার্ডে ক্লিক করলে কালার স্থায়ী হবে না বা active ক্লাস যোগ হবে না
+
+    // আপনার বাকি লজিক...
+    document.querySelectorAll('.app-section').forEach(e => e.classList.remove('active'));
+    document.body.classList.add('sub-page');
+    
+    const tabBar = document.querySelector('.tab-bar');
+    if (tabBar) tabBar.classList.add('hidden');
+
+    const view = document.getElementById('payment-flow-view');
+    if (view) view.classList.add('active');
+
+    resetPaymentInputs();
+    updatePaymentUI(currentPayMethod);
+    setPaymentStep(1);
 }
 
-async function verifyAutoPay(method) {
-    if (!currentUser) return;
 
-    // সরাসরি HTML ইনপুট থেকে ডাটা সংগ্রহ
-    const amountField = document.getElementById(`amount-${method}`);
-    const trxField = document.getElementById(`trx-${method}`);
 
-    const amount = amountField.value.trim();
-    const trxId = trxField.value.trim().toUpperCase(); // ভ্যালিডেশন এবং ডাটাবেসের জন্য uppercase করা হলো
+
+
+
+function backToAddMoney() {
+        showAddMoneyView();
+    }
     
-    // ১. টাকার পরিমাণ ভ্যালিডেশন
-    if (!amount || amount <= 0) {
-        return Swal.fire({ 
-            icon: 'warning', 
-            title: 'Oops...', 
-            text: 'দয়া করে সঠিক টাকার পরিমাণ লিখুন',
-            background: '#1a1a2e',
-            color: '#fff'
-        });
-    }
-
-    // ২. ট্রানজেকশন আইডি খালি কিনা তা ভ্যালিডেশন
-    if (!trxId) {
-        return Swal.fire({ 
-            icon: 'warning', 
-            title: 'Oops...', 
-            text: 'দয়া করে ট্রানজেকশন আইডি দিন',
-            background: '#1a1a2e',
-            color: '#fff'
-        });
-    }
-
-    // ৩. রিয়েল ট্রানজেকশন ফরম্যাট ভ্যালিডেশন (Regex)
-    let isValidFormat = true;
-    let formatErrorMsg = "";
     
-    const methodLower = method.toLowerCase();
     
-    if (methodLower === 'bkash') {
-        // bKash: ঠিক ১০ অক্ষরের Letter এবং Number এর সংমিশ্রণ
-        const bkashRegex = /^[A-Z0-9]{10}$/;
-        if (!bkashRegex.test(trxId)) {
-            isValidFormat = false;
-            formatErrorMsg = "আপনার ট্রানজেকশন আইডি  সঠিক  না । দয়া করে সঠিক ট্রানজেকশন দিন ";
-        }
-    } else if (methodLower === 'nagad') {
-        // Nagad: ঠিক ৮ অক্ষরের Letter এবং Number এর সংমিশ্রণ
-        const nagadRegex = /^[A-Z0-9]{8}$/;
-        if (!nagadRegex.test(trxId)) {
-            isValidFormat = false;
-            formatErrorMsg = "আপনার ট্রানজেকশন আইডি  সঠিক  না । দয়া করে সঠিক ট্রানজেকশন দিন ";
-        }
-    } else if (methodLower === 'rocket') {
-        // Rocket: ঠিক ১০ ডিজিটের সংখ্যা
-        const rocketRegex = /^[0-9]{10}$/;
-        if (!rocketRegex.test(trxId)) {
-            isValidFormat = false;
-            formatErrorMsg = "আপনার ট্রানজেকশন আইডি  সঠিক  না । দয়া করে সঠিক ট্রানজেকশন দিন ";
-        }
-    }
-
-    if (!isValidFormat) {
-        return Swal.fire({ 
-            icon: 'error', 
-            title: 'ভুল ফরম্যাট', 
-            text: formatErrorMsg,
-            background: '#1a1a2e',
-            color: '#fff'
-        });
-    }
-
-    toggleLoader(true);
-
-    try {
-        // ৪. ডাটাবেসে ডুপ্লিকেট ট্রানজেকশন আইডি চেক
-        const requestRef = ref(db, 'deposit_requests');
-        const trxQuery = query(requestRef, orderByChild('trxId'), equalTo(trxId));
-        const trxSnapshot = await get(trxQuery);
-
-        if (trxSnapshot.exists()) {
-            toggleLoader(false);
+    function continuePaymentFlow() {
+        const amountEl = document.getElementById('payment-amount');
+        const amount = amountEl ? parseFloat(amountEl.value) : 0;
+        if (!amount || amount <= 0) {
             return Swal.fire({
-                icon: 'error',
-                title: 'ব্যবহৃত TrxID!',
-                text: 'এই ট্রানজেকশন আইডিটি ইতিমধ্যে একবার ব্যবহার করা হয়েছে।',
+                icon: 'warning',
+                title: 'Amount required',
+                text: 'দয়া করে সঠিক amount লিখুন',
                 background: '#1a1a2e',
                 color: '#fff'
             });
         }
 
-        // ৫. অ্যাডমিনের জন্য deposit_requests নোডে ডাটা পাঠানো
-        const newRequestRef = push(requestRef);
-        await set(newRequestRef, {
-            uid: currentUser.uid,
-            username: currentUser.displayName || 'Unknown User',
-            email: currentUser.email,
-            method: method,
-            trxId: trxId,
-            amount: parseFloat(amount),
-            status: 'Pending',
-            timestamp: serverTimestamp(),
-            date: new Date().toLocaleString()
-        });
+        paymentFlowState.amount = amount;
+        const amountDisplay = document.getElementById('payment-mini-amount');
+        if (amountDisplay) amountDisplay.innerText = amount.toFixed(0);
 
-        // ৬. ইউজারের ট্রানজেকশন হিস্ট্রিতে Pending হিসেবে দেখানো
-        const txKey = push(ref(db, 'transactions/' + currentUser.uid)).key;
-        await set(ref(db, 'transactions/' + currentUser.uid + '/' + txKey), {
-            type: `Deposit (${method})`,
-            amount: parseFloat(amount),
-            method: method,
-            status: 'Pending',
-            txID: trxId,
-            date: new Date().toLocaleString()
-        });
+        setPaymentStep(2);
+    }
 
-        toggleLoader(false);
-        
-        // ৭. সফল হওয়ার মেসেজ
-        Swal.fire({
-            icon: 'success',
-            title: 'রিকোয়েস্ট সফল!',
-            text: 'অ্যাডমিন আপনার আইডি চেক করে ব্যালেন্স অ্যাড করে দিবে।',
-            confirmButtonText: 'ঠিক আছে',
-            background: '#1a1a2e',
-            color: '#fff'
-        }).then(() => {
-            // ইনপুট বক্সগুলো খালি করা
-            amountField.value = ""; 
-            trxField.value = ""; 
-            window.navigateSub('wallet');
-        });
+    function goPaymentVerifyStep() {
+        setPaymentStep(3);
+    }
 
-    } catch (e) {
-        toggleLoader(false);
-        Swal.fire({
-            icon: 'error',
-            title: 'ভুল হয়েছে',
-            text: e.message,
-            background: '#1a1a2e',
-            color: '#fff'
+    function switchPayTab(t) {
+        openPaymentFlow(t);
+    }
+
+    function triggerVerify() {
+        return verifyPaymentFlow();
+    }
+
+    function getTrxPatternByMethod(method) {
+    const normalized = normalizePaymentMethod(method);
+    
+    // bKash: ঠিক ১০টি ক্যারেক্টার (বড় হাতের অক্ষর এবং সংখ্যা)
+    if (normalized === 'bkash') return /^[A-Z0-9]{10}$/;
+    
+    // Nagad: ঠিক ৮টি ক্যারেক্টার (বড় হাতের অক্ষর এবং সংখ্যা)
+    if (normalized === 'nagad') return /^[A-Z0-9]{8}$/;
+    
+    // Rocket: ঠিক ১০টি শুধুমাত্র সংখ্যা
+    if (normalized === 'rocket') return /^[0-9]{10}$/;
+    
+    // Card: ৬ থেকে ২০ ক্যারেক্টার
+    if (normalized === 'card') return /^[A-Z0-9]{6,20}$/;
+    
+    return /^[A-Z0-9]{4,20}$/;
+}
+
+
+    async function saveDepositRequest({ method, amount, senderNumber, trxId }) {
+        if (!currentUser) return;
+
+        const normalized = normalizePaymentMethod(method);
+        const cleanedTrx = String(trxId || '').trim()
+        const cleanedSender = String(senderNumber || '').trim();
+
+        if (!amount || amount <= 0) {
+            return Swal.fire({
+                icon: 'warning',
+                title: 'Amount missing',
+                text: 'আগে amount দিন',
+                background: '#1a1a2e',
+                color: '#fff'
+            });
+        }
+
+        const bdPhonePattern = /^01[3-9]\d{8}$/;
+    if (!bdPhonePattern.test(cleanedSender)) {
+            return Swal.fire({
+                icon: 'warning',
+                title: 'Sender number invalid',
+                text: '১১ ডিজিটের sender number দিন',
+                background: '#1a1a2e',
+                color: '#fff'
+            });
+        }
+
+        const trxPattern = getTrxPatternByMethod(normalized);
+        if (!trxPattern.test(cleanedTrx)) {
+            return Swal.fire({
+                icon: 'error',
+                title: 'ভুল ফরম্যাট',
+                text: 'দয়া করে সঠিক ট্রানজেকশন/ TNX দিন',
+                background: '#1a1a2e',
+                color: '#fff'
+            });
+        }
+
+        if (typeof toggleLoader === 'function') toggleLoader(true);
+
+        try {
+            const requestRef = ref(db, 'deposit_requests');
+            const trxQuery = query(requestRef, orderByChild('trxId'), equalTo(cleanedTrx));
+            const trxSnapshot = await get(trxQuery);
+
+            if (trxSnapshot.exists()) {
+                if (typeof toggleLoader === 'function') toggleLoader(false);
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Used TNX',
+                    text: 'এই TNX আগে ব্যবহার করা হয়েছে',
+                    background: '#1a1a2e',
+                    color: '#fff'
+                });
+            }
+
+            const newRequestRef = push(requestRef);
+            await set(newRequestRef, {
+                uid: currentUser.uid,
+                username: currentUser.displayName || 'Unknown User',
+                email: currentUser.email,
+                method: normalized,
+                senderNumber: cleanedSender,
+                trxId: cleanedTrx,
+                amount: Number(amount),
+                status: 'Pending',
+                timestamp: serverTimestamp(),
+                date: new Date().toLocaleString()
+            });
+
+            const txKey = push(ref(db, 'transactions/' + currentUser.uid)).key;
+            await set(ref(db, 'transactions/' + currentUser.uid + '/' + txKey), {
+                type: `Deposit (${normalized})`,
+                amount: Number(amount),
+                method: normalized,
+                senderNumber: cleanedSender,
+                status: 'Pending',
+                txID: cleanedTrx,
+                date: new Date().toLocaleString()
+            });
+
+            if (typeof toggleLoader === 'function') toggleLoader(false);
+
+            await Swal.fire({
+                icon: 'success',
+                title: 'রিকোয়েস্ট সফল!',
+                text: 'অ্যাডমিন চেক করে ব্যালেন্স অ্যাড করবে।',
+                confirmButtonText: 'ঠিক আছে',
+                background: '#1a1a2e',
+                color: '#fff'
+            });
+
+            paymentFlowState.amount = 0;
+            resetPaymentInputs();
+            backToAddMoney();
+
+        } catch (e) {
+            if (typeof toggleLoader === 'function') toggleLoader(false);
+            Swal.fire({
+                icon: 'error',
+                title: 'ভুল হয়েছে',
+                text: e && e.message ? e.message : 'Unknown error',
+                background: '#1a1a2e',
+                color: '#fff'
+            });
+        }
+    }
+
+    async function verifyPaymentFlow() {
+        if (!currentUser) return;
+
+        const method = normalizePaymentMethod(paymentFlowState.method || currentPayMethod || 'bkash');
+        const amount = Number(paymentFlowState.amount || 0);
+
+        const senderField = document.getElementById('payment-sender');
+        const tnxField = document.getElementById('payment-tnx');
+        const senderNumber = senderField ? senderField.value.trim() : '';
+        const trxId = tnxField ? tnxField.value.trim() : '';
+
+        return saveDepositRequest({
+            method,
+            amount,
+            senderNumber,
+            trxId
         });
     }
-}
+
+    function verifyAutoPay(method) {
+        // Backward compatibility for older method-specific buttons/flows.
+        if (method) {
+            const normalized = normalizePaymentMethod(method);
+            const amountField = getLegacyPaymentField(normalized, 'amount');
+            const trxField = getLegacyPaymentField(normalized, 'trx');
+            const senderField = getLegacyPaymentField(normalized, 'sender');
+
+            const amount = amountField ? parseFloat(amountField.value) : 0;
+            const trxId = trxField ? trxField.value.trim() : '';
+            const senderNumber = senderField ? senderField.value.trim() : '';
+
+            paymentFlowState.method = normalized;
+            paymentFlowState.amount = amount || 0;
+            currentPayMethod = normalized;
+
+            return saveDepositRequest({
+                method: normalized,
+                amount,
+                senderNumber,
+                trxId
+            });
+        }
+
+        return verifyPaymentFlow();
+    }
+
+    // Make payment-flow functions accessible from inline onclick handlers.
+    window.openPaymentFlow = openPaymentFlow;
+    window.backToAddMoney = backToAddMoney;
+    window.continuePaymentFlow = continuePaymentFlow;
+    window.goPaymentVerifyStep = goPaymentVerifyStep;
+    window.switchPayTab = switchPayTab;
+    window.triggerVerify = triggerVerify;
+    window.verifyPaymentFlow = verifyPaymentFlow;
+    window.verifyAutoPay = verifyAutoPay;
+    window.saveDepositRequest = saveDepositRequest;
+  
+ 
 
 
     function startTimers() {
