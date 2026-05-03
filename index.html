@@ -2012,6 +2012,221 @@
     .fab-telegram img { width: 100%; height: 100%; }
     
     .empty-msg { text-align: center; padding: 30px; color: #999; font-weight: 600; }
+    
+    /* ============ DARK MODE GLOBAL ============ */
+body.dark-mode {
+  --bg-color: #121212;
+  --text-dark: #ffffff;
+  --white: #1e1e1e;
+  --primary: #7c4dff;
+  --primary-light: #2c2548;
+  background: #0a0a0a;
+  color: #f0f0f0;
+}
+
+body.dark-mode .tab-bar {
+  background: #1e1e1e !important;
+  border-color: #333 !important;
+}
+
+body.dark-mode .tab-item span {
+  color: #ccc !important;
+}
+body.dark-mode .tab-item.active span {
+  color: #fff !important;
+}
+
+/* পেজ ব্যাকগ্রাউন্ড */
+body.dark-mode .app-section,
+body.dark-mode #main-content,
+body.dark-mode .wallet-redesign-container,
+body.dark-mode .withdraw-new-container,
+body.dark-mode .ep-container,
+body.dark-mode .dev-page,
+body.dark-mode #tab-home-view,
+body.dark-mode #tab-mymatches-view,
+body.dark-mode #tab-result-view,
+body.dark-mode #tab-proof-view,
+body.dark-mode #tab-video-view,
+body.dark-mode #matches-view,
+body.dark-mode #match-details-view,
+body.dark-mode #join-match-view,
+body.dark-mode #wallet-view,
+body.dark-mode #add-money-view,
+body.dark-mode #payment-flow-view,
+body.dark-mode #withdraw-view,
+body.dark-mode #history-view,
+body.dark-mode #notifications-view,
+body.dark-mode #result-details-view,
+body.dark-mode #edit-profile-view,
+body.dark-mode #refer-view,
+body.dark-mode #developer-view {
+  background: #0a0a0a !important;
+}
+
+/* কার্ড, বক্স, পপআপ */
+body.dark-mode .match-card,
+body.dark-mode .cat-card-new,
+body.dark-mode .cat-card-info,
+body.dark-mode .am-card,
+body.dark-mode .payment-method-card,
+body.dark-mode .payment-flow-card,
+body.dark-mode .payment-step,
+body.dark-mode .payment-helper,
+body.dark-mode .wallet-gradient-card,
+body.dark-mode .wallet-stats-white-card,
+body.dark-mode .quick-action-card,
+body.dark-mode .learn-item,
+body.dark-mode .history-card,
+body.dark-mode .notif-card,
+body.dark-mode .menu-item,
+body.dark-mode .menu-list,
+body.dark-mode .withdraw-balance-card,
+body.dark-mode .withdraw-section-box,
+body.dark-mode .ep-card,
+body.dark-mode .dev-card,
+body.dark-mode .join-card,
+body.dark-mode .md-info-card,
+body.dark-mode .md-table-container,
+body.dark-mode .rd-card,
+body.dark-mode .rd-title-box,
+body.dark-mode .refer-body,
+body.dark-mode .refer-header {
+  background: #1e1e1e !important;
+  border-color: #333 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+}
+
+/* ইনপুট ফিল্ড */
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select,
+body.dark-mode .auth-input-field,
+body.dark-mode .join-input,
+body.dark-mode .ep-input,
+body.dark-mode .wd-input,
+body.dark-mode .input-field,
+body.dark-mode #payment-amount,
+body.dark-mode #payment-sender,
+body.dark-mode #payment-tnx {
+  background: #2c2c2c !important;
+  color: #fff !important;
+  border-color: #444 !important;
+}
+
+/* বাটন */
+body.dark-mode .btn-join-main,
+body.dark-mode .btn-details,
+body.dark-mode .primary-btn,
+body.dark-mode .ep-btn,
+body.dark-mode .wa-btn,
+body.dark-mode .wd-submit-btn,
+body.dark-mode .am-verify-btn,
+body.dark-mode .join-btn-full,
+body.dark-mode .payment-step-btn,
+body.dark-mode .startup-btn {
+  background: #333 !important;
+  color: #fff !important;
+  border-color: #555 !important;
+}
+
+/* টেক্সট যাতে সাদা থাকে */
+body.dark-mode .cat-card-title,
+body.dark-mode .mc-title-row,
+body.dark-mode .mc-stat-value,
+body.dark-mode .rd-main-title,
+body.dark-mode .rd-stat-item div,
+body.dark-mode .hc-title,
+body.dark-mode .hc-amount,
+body.dark-mode .ep-username,
+body.dark-mode .ep-email,
+body.dark-mode .ep-card-title,
+body.dark-mode .ws-label,
+body.dark-mode .ws-amount,
+body.dark-mode .qa-text div {
+  color: #fff !important;
+}
+
+/* অন্যান্য ছোটখাট */
+body.dark-mode .join-warning {
+  background: #332200;
+  color: #ffc107;
+}
+body.dark-mode .payment-note-list li {
+  color: #ccc;
+}
+/* ========== অটো ডেস্কটপ সাইডবার (কোনো বাটন নয়) ========== */
+@media (min-width: 768px) {
+  .tab-bar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: auto !important;
+    width: 80px !important;
+    height: 100vh !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    padding: 20px 0 !important;
+    gap: 15px !important;
+    border-top: none !important;
+    border-right: 1px solid #e0e0e0 !important;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.06) !important;
+    z-index: 1000 !important;
+    background: white !important; /* ডার্ক মোড ছাড়া সাদা */
+  }
+
+  .tab-item {
+    width: 100% !important;
+    height: 70px !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+
+  .tab-item span {
+    font-size: 10px !important;
+    margin-top: 4px !important;
+  }
+
+  .tab-item.active .tab-icon-box {
+    width: 56px !important;
+    height: 28px !important;
+  }
+
+  #main-content,
+  body.sub-page #main-content {
+    margin-left: 80px !important;
+    width: calc(100% - 80px) !important;
+  }
+
+  .fab-report,
+  .fab-telegram {
+    right: 20px !important;
+    left: auto !important;
+  }
+}
+
+/* মোবাইলের জন্য (প্রস্থ < 768px) */
+@media (max-width: 767px) {
+  .tab-bar {
+    position: fixed !important;
+    bottom: 0 !important;
+    top: auto !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 65px !important;
+    flex-direction: row !important;
+    justify-content: space-around !important;
+    border-top: 1px solid #f0f0f0 !important;
+    border-right: none !important;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05) !important;
+  }
+
+  #main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
 </style>
 </head>
 
@@ -2333,7 +2548,11 @@
                     <span>Developer</span>
                     <i class="fas fa-chevron-right" style="margin-left:auto; color:#ccc;"></i>
                 </div>
-
+<div class="menu-item" onclick="window.toggleDarkMode()">
+    <img src="https://img.icons8.com/fluency-systems-regular/48/do-not-disturb-2.png" style="width:20px;">
+    <span>Dark Mode</span>
+    <i class="fas fa-moon" style="margin-left:auto; color:#ff9800;"></i>
+</div>
                 <div class="menu-item" onclick="window.handleLogout()" id="profile-logout-btn">
                     <i class="fas fa-sign-out-alt" style="color:var(--danger); width:20px;"></i>
                     <span style="color:var(--danger);">Logout</span>
@@ -5788,6 +6007,35 @@ async function cleanupOldRecords(uid) {
 }
 
 
+// Dark Mode Toggle
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+  if (document.body.classList.contains('dark-mode')) {
+    localStorage.setItem('theme', 'dark');
+  } else {
+    localStorage.setItem('theme', 'light');
+  }
+}
+
+// পেইজ লোডে পূর্বের পছন্দ পুনরুদ্ধার
+(function() {
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode');
+  }
+})();
+
+window.toggleDarkMode = toggleDarkMode;
+
+// অটো ডেস্কটপ সাইডবারের জন্য প্রয়োজন নেই, কিন্তু applyResponsiveMode রাখলেও ক্ষতি নেই
+function applyResponsiveMode() {
+  // এই ফাংশনটি এখন আর দরকার নেই, কারণ আমরা মিডিয়া কুয়েরিতেই সব করছি
+  // রেখে দিতে পারেন বা মুছেও দিতে পারেন
+}
+window.addEventListener('resize', applyResponsiveMode);
+window.addEventListener('load', applyResponsiveMode);
+
+// Desktop Mode টগল ফাংশন ও localStorage লজিক সম্পূর্ণ মুছে দিন
+// (কোনো বাটন নেই বলে এগুলো দরকার নেই)
 
 </script>
 
