@@ -3329,6 +3329,64 @@ let blockShown = false;
     let paymentFlowState = { method: 'bkash', amount: 0 };
     let paymentNumbers = { bkash: '', rocket: '', nagad: '', card: '' };
     let allParticipants = {};
+    let guestMode = true;
+    const AUTH_LOCK_TEXT = 'এই ফিচার ব্যবহার করতে হলে লগইন বা রেজিস্ট্রেশন করতে হবে।';
+    const AUTH_LOCK_TITLE = 'Login Required';
+
+    function focusAuth(mode = 'login') {
+        const authViewEl = document.getElementById('auth-view');
+        const mainEl = document.getElementById('main-content');
+        const tabEl = document.querySelector('.tab-bar');
+
+        if (mainEl) mainEl.style.display = 'none';
+        if (tabEl) tabEl.classList.add('hidden');
+        if (authViewEl) authViewEl.classList.add('active');
+
+        toggleAuthMode(mode);
+        guestMode = true;
+    }
+
+    function showGuestShell() {
+        const mainEl = document.getElementById('main-content');
+        const tabEl = document.querySelector('.tab-bar');
+        const authViewEl = document.getElementById('auth-view');
+
+        if (mainEl) mainEl.style.display = 'block';
+        if (tabEl) tabEl.classList.remove('hidden');
+        if (authViewEl) authViewEl.classList.remove('active');
+        document.body.classList.remove('sub-page');
+
+        guestMode = true;
+        showTab('home');
+    }
+
+    function requireAuth(featureName = AUTH_LOCK_TEXT, mode = 'login') {
+        if (currentUser) return true;
+
+        Swal.fire({
+            icon: 'info',
+            title: AUTH_LOCK_TITLE,
+            text: featureName,
+            confirmButtonText: 'লগইন করুন',
+            confirmButtonColor: '#3F51B5'
+        }).then(() => {
+            focusAuth(mode);
+        });
+
+        return false;
+    }
+
+    const guestRestrictedSubPages = new Set([
+        'wallet',
+        'add-money',
+        'payment-flow',
+        'withdraw',
+        'history',
+        'notifications',
+        'refer',
+        'edit-profile'
+    ]);
+
 
     // Expose functions to window
     window.verifyAutoPay = verifyPaymentFlow;
@@ -3661,6 +3719,11 @@ window.processInAppUpdate = function(fileUrl) {
 
 
     function navigateSub(t) {
+        if (!currentUser && guestRestrictedSubPages.has(t)) {
+            requireAuth(AUTH_LOCK_TEXT);
+            return;
+        }
+
         toggleLoader(true);
         setTimeout(() => {
             document.querySelectorAll('.app-section').forEach(e => e.classList.remove('active'));
@@ -3681,8 +3744,8 @@ window.processInAppUpdate = function(fileUrl) {
                 document.getElementById('deposit-available-wallet').innerText = depositBal;
             } else if(t==='withdraw' && currentUser) {
                 document.getElementById('withdraw-available').innerText = winningBal;
-            } else if(t==='history') loadHistory();
-            else if(t==='notifications') loadNotifs();
+            } else if(t==='history' && currentUser) loadHistory();
+            else if(t==='notifications' && currentUser) loadNotifs();
             else if(t==='edit-profile' && currentUser) {
                  document.getElementById('ep-username').value = currentUser.displayName || '';
                  document.getElementById('ep-email').value = currentUser.email || '';
@@ -4190,8 +4253,11 @@ function openMatchRules(key) {
 window.openMatchRules = openMatchRules;
 
     function checkRoom(key) {
-         if(!currentUser) return;
-         
+         if(!currentUser) {
+             requireAuth('রুম আইডি দেখতে হলে আগে লগইন করতে হবে।');
+             return;
+         }
+
          const m = rawMatches.find(x => x.dbKey === key);
          if(!m) return;
 
@@ -4220,8 +4286,11 @@ window.openMatchRules = openMatchRules;
     }
 
     function prepJoin(id, type, fee, key, title) {
-    if(!currentUser) return;
-    
+    if(!currentUser) {
+        requireAuth('ম্যাচে জয়েন করতে হলে আগে লগইন করতে হবে।');
+        return;
+    }
+
     // ডুপ্লিকেট চেক
     if(userJoinedMatches.includes(id)) {
         Swal.fire({ icon:'warning', title:'Already Joined', text:'You have already joined this match!' });
@@ -4277,6 +4346,11 @@ window.openMatchRules = openMatchRules;
     }
 
     async function confirmJoin() {
+    if(!currentUser) {
+        requireAuth('ম্যাচে জয়েন করতে হলে আগে লগইন করতে হবে।');
+        return;
+    }
+
     // ১. ডুপ্লিকেট চেক
     if(userJoinedMatches.includes(currentJoinId)) {
         return Swal.fire({ icon:'warning', title:'Already Joined', text:'আপনি অলরেডি এই ম্যাচে জয়েন করেছেন!' });
@@ -4363,6 +4437,11 @@ window.openMatchRules = openMatchRules;
 // আর যদি মডিউল স্ক্রিপ্ট হয়, তবে শেষে দেওয়া লাইনটি যোগ করো।
 
 async function saveProfile(type) {
+    if(!currentUser) {
+        requireAuth('প্রোফাইল আপডেট বা পাসওয়ার্ড পরিবর্তন করতে হলে লগইন করতে হবে।');
+        return;
+    }
+
     const n = document.getElementById('ep-username').value.trim();
     const ph = document.getElementById('ep-phone').value.trim();
     const curP = document.getElementById('ep-pass-cur').value;
@@ -4440,6 +4519,11 @@ window.saveProfile = saveProfile;
 
     
         function submitWithdraw() {
+        if(!currentUser) {
+            requireAuth('উইথড্র করতে হলে আগে লগইন করতে হবে।');
+            return;
+        }
+
         const am = parseFloat(document.getElementById('withdraw-amount').value);
         const num = document.getElementById('withdraw-number').value.trim();
         const met = document.getElementById('withdraw-method').value;
@@ -4626,6 +4710,11 @@ function getPaymentMeta(method) {
 
      
     function openPaymentFlow(method) {
+    if(!currentUser) {
+        requireAuth('টাকা অ্যাড করতে হলে আগে লগইন করতে হবে।');
+        return;
+    }
+
     currentPayMethod = normalizePaymentMethod(method);
     paymentFlowState.method = currentPayMethod;
     paymentFlowState.amount = 0;
@@ -4801,7 +4890,10 @@ async function autoApproveDeposit({ uid, username, email, method, amount, sender
 }
 // ── Main function (তোমার বর্তমান saveDepositRequest replace করো) ──
 async function saveDepositRequest({ method, amount, senderNumber, trxId }) {
-    if (!currentUser) return;
+    if (!currentUser) {
+        requireAuth('টাকা অ্যাড করতে হলে আগে লগইন করতে হবে।');
+        return;
+    }
 
     const normalized    = normalizePaymentMethod(method);
     const cleanedTrx    = String(trxId        || '').trim();
@@ -4917,7 +5009,10 @@ async function saveDepositRequest({ method, amount, senderNumber, trxId }) {
 }
 
     async function verifyPaymentFlow() {
-        if (!currentUser) return;
+        if (!currentUser) {
+            requireAuth('টাকা অ্যাড করতে হলে আগে লগইন করতে হবে।');
+            return;
+        }
 
         const method = normalizePaymentMethod(paymentFlowState.method || currentPayMethod || 'bkash');
         const amount = Number(paymentFlowState.amount || 0);
@@ -5168,22 +5263,23 @@ onAuthStateChanged(auth, async (u) => {
         }
 
     } else {
-        if (supportFab) supportFab.style.display = 'none';
-        if (reportFab) reportFab.style.display = 'none';
-
         currentUser = null;
+        guestMode = true;
+
         const mainEl = document.getElementById('main-content');
         const tabEl = document.querySelector('.tab-bar');
         const authViewEl = document.getElementById('auth-view');
 
-        if (mainEl) mainEl.style.display = 'none';
-        if (tabEl) tabEl.classList.add('hidden');
-        if (authViewEl) authViewEl.classList.add('active');
+        if (supportFab) supportFab.style.display = 'flex';
+        if (reportFab) reportFab.style.display = 'flex';
 
         const urlParams = new URLSearchParams(window.location.search);
         const refCode = urlParams.get('ref');
 
         if (refCode) {
+            if (mainEl) mainEl.style.display = 'none';
+            if (tabEl) tabEl.classList.add('hidden');
+            if (authViewEl) authViewEl.classList.add('active');
             toggleAuthMode('register');
 
             setTimeout(() => {
@@ -5194,7 +5290,12 @@ onAuthStateChanged(auth, async (u) => {
                 }
             }, 500);
         } else {
+            if (mainEl) mainEl.style.display = 'block';
+            if (tabEl) tabEl.classList.remove('hidden');
+            if (authViewEl) authViewEl.classList.remove('active');
+            document.body.classList.remove('sub-page');
             toggleAuthMode('login');
+            setTimeout(() => showTab('home'), 50);
         }
     }
 });
@@ -5447,6 +5548,11 @@ window.toggleAuthMode = toggleAuthMode;
 
     
     function handleLogout() { 
+        if (!currentUser) {
+            focusAuth('login');
+            return;
+        }
+
         Swal.fire({
             title: 'Logout?',
             text: "Are you sure you want to logout?",
@@ -5771,6 +5877,11 @@ window.removeImage = function(index, type) {
 
 // ৫. মেইন সাবমিট ফাংশন (Direct function declaration)
 async function uploadAndSubmitResult() {
+    if(!currentUser) {
+        requireAuth('প্রুফ সাবমিট করতে হলে আগে লগইন করতে হবে।');
+        return;
+    }
+
     const email = document.getElementById('res-email')?.value.trim();
     const gCat = document.getElementById('res-game-cat')?.value;
     const roomId = document.getElementById('res-room-id')?.value.trim();
